@@ -1,0 +1,17 @@
+{
+  "name": "yomu · 일본어 독해 연습",
+  "short_name": "yomu",
+  "description": "게임·SNS 일본어를 읽기 위한 가나 복습, 어휘, 문장 독해 연습",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf7f5",
+  "theme_color": "#e8505b",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "sections": [
+    {
+      "id": "basic",
+      "name": "기본 (청음)",
+      "cols": 5,
+      "rows": [
+        [{"hira": "あ", "kata": "ア", "romaji": "a", "ko": "아"}, {"hira": "い", "kata": "イ", "romaji": "i", "ko": "이"}, {"hira": "う", "kata": "ウ", "romaji": "u", "ko": "우"}, {"hira": "え", "kata": "エ", "romaji": "e", "ko": "에"}, {"hira": "お", "kata": "オ", "romaji": "o", "ko": "오"}],
+        [{"hira": "か", "kata": "カ", "romaji": "ka", "ko": "카"}, {"hira": "き", "kata": "キ", "romaji": "ki", "ko": "키"}, {"hira": "く", "kata": "ク", "romaji": "ku", "ko": "쿠"}, {"hira": "け", "kata": "ケ", "romaji": "ke", "ko": "케"}, {"hira": "こ", "kata": "コ", "romaji": "ko", "ko": "코"}],
+        [{"hira": "さ", "kata": "サ", "romaji": "sa", "ko": "사"}, {"hira": "し", "kata": "シ", "romaji": "shi", "ko": "시"}, {"hira": "す", "kata": "ス", "romaji": "su", "ko": "스"}, {"hira": "せ", "kata": "セ", "romaji": "se", "ko": "세"}, {"hira": "そ", "kata": "ソ", "romaji": "so", "ko": "소"}],
+        [{"hira": "た", "kata": "タ", "romaji": "ta", "ko": "타"}, {"hira": "ち", "kata": "チ", "romaji": "chi", "ko": "치"}, {"hira": "つ", "kata": "ツ", "romaji": "tsu", "ko": "츠"}, {"hira": "て", "kata": "テ", "romaji": "te", "ko": "테"}, {"hira": "と", "kata": "ト", "romaji": "to", "ko": "토"}],
+        [{"hira": "な", "kata": "ナ", "romaji": "na", "ko": "나"}, {"hira": "に", "kata": "ニ", "romaji": "ni", "ko": "니"}, {"hira": "ぬ", "kata": "ヌ", "romaji": "nu", "ko": "누"}, {"hira": "ね", "kata": "ネ", "romaji": "ne", "ko": "네"}, {"hira": "の", "kata": "ノ", "romaji": "no", "ko": "노"}],
+        [{"hira": "は", "kata": "ハ", "romaji": "ha", "ko": "하"}, {"hira": "ひ", "kata": "ヒ", "romaji": "hi", "ko": "히"}, {"hira": "ふ", "kata": "フ", "romaji": "fu", "ko": "후"}, {"hira": "へ", "kata": "ヘ", "romaji": "he", "ko": "헤"}, {"hira": "ほ", "kata": "ホ", "romaji": "ho", "ko": "호"}],
+        [{"hira": "ま", "kata": "マ", "romaji": "ma", "ko": "마"}, {"hira": "み", "kata": "ミ", "romaji": "mi", "ko": "미"}, {"hira": "む", "kata": "ム", "romaji": "mu", "ko": "무"}, {"hira": "め", "kata": "メ", "romaji": "me", "ko": "메"}, {"hira": "も", "kata": "モ", "romaji": "mo", "ko": "모"}],
+        [{"hira": "や", "kata": "ヤ", "romaji": "ya", "ko": "야"}, null, {"hira": "ゆ", "kata": "ユ", "romaji": "yu", "ko": "유"}, null, {"hira": "よ", "kata": "ヨ", "romaji": "yo", "ko": "요"}],
+        [{"hira": "ら", "kata": "ラ", "romaji": "ra", "ko": "라"}, {"hira": "り", "kata": "リ", "romaji": "ri", "ko": "리"}, {"hira": "る", "kata": "ル", "romaji": "ru", "ko": "루"}, {"hira": "れ", "kata": "レ", "romaji": "re", "ko": "레"}, {"hira": "ろ", "kata": "ロ", "romaji": "ro", "ko": "로"}],
+        [{"hira": "わ", "kata": "ワ", "romaji": "wa", "ko": "와"}, null, null, null, {"hira": "を", "kata": "ヲ", "romaji": "wo", "ko": "오"}],
+        [{"hira": "ん", "kata": "ン", "romaji": "n", "ko": "응(ㄴ)"}, null, null, null, null]
+      ]
+    },
+    {
+      "id": "dakuon",
+      "name": "탁음·반탁음 (゛゜)",
+      "cols": 5,
+      "rows": [
+        [{"hira": "が", "kata": "ガ", "romaji": "ga", "ko": "가"}, {"hira": "ぎ", "kata": "ギ", "romaji": "gi", "ko": "기"}, {"hira": "ぐ", "kata": "グ", "romaji": "gu", "ko": "구"}, {"hira": "げ", "kata": "ゲ", "romaji": "ge", "ko": "게"}, {"hira": "ご", "kata": "ゴ", "romaji": "go", "ko": "고"}],
+        [{"hira": "ざ", "kata": "ザ", "romaji": "za", "ko": "자"}, {"hira": "じ", "kata": "ジ", "romaji": "ji", "ko": "지"}, {"hira": "ず", "kata": "ズ", "romaji": "zu", "ko": "즈"}, {"hira": "ぜ", "kata": "ゼ", "romaji": "ze", "ko": "제"}, {"hira": "ぞ", "kata": "ゾ", "romaji": "zo", "ko": "조"}],
+        [{"hira": "だ", "kata": "ダ", "romaji": "da", "ko": "다"}, {"hira": "ぢ", "kata": "ヂ", "romaji": "ji(di)", "ko": "지"}, {"hira": "づ", "kata": "ヅ", "romaji": "zu(du)", "ko": "즈"}, {"hira": "で", "kata": "デ", "romaji": "de", "ko": "데"}, {"hira": "ど", "kata": "ド", "romaji": "do", "ko": "도"}],
+        [{"hira": "ば", "kata": "バ", "romaji": "ba", "ko": "바"}, {"hira": "び", "kata": "ビ", "romaji": "bi", "ko": "비"}, {"hira": "ぶ", "kata": "ブ", "romaji": "bu", "ko": "부"}, {"hira": "べ", "kata": "ベ", "romaji": "be", "ko": "베"}, {"hira": "ぼ", "kata": "ボ", "romaji": "bo", "ko": "보"}],
+        [{"hira": "ぱ", "kata": "パ", "romaji": "pa", "ko": "파"}, {"hira": "ぴ", "kata": "ピ", "romaji": "pi", "ko": "피"}, {"hira": "ぷ", "kata": "プ", "romaji": "pu", "ko": "푸"}, {"hira": "ぺ", "kata": "ペ", "romaji": "pe", "ko": "페"}, {"hira": "ぽ", "kata": "ポ", "romaji": "po", "ko": "포"}]
+      ]
+    },
+    {
+      "id": "yoon",
+      "name": "요음 (ゃゅょ)",
+      "cols": 3,
+      "rows": [
+        [{"hira": "きゃ", "kata": "キャ", "romaji": "kya", "ko": "캬"}, {"hira": "きゅ", "kata": "キュ", "romaji": "kyu", "ko": "큐"}, {"hira": "きょ", "kata": "キョ", "romaji": "kyo", "ko": "쿄"}],
+        [{"hira": "しゃ", "kata": "シャ", "romaji": "sha", "ko": "샤"}, {"hira": "しゅ", "kata": "シュ", "romaji": "shu", "ko": "슈"}, {"hira": "しょ", "kata": "ショ", "romaji": "sho", "ko": "쇼"}],
+        [{"hira": "ちゃ", "kata": "チャ", "romaji": "cha", "ko": "차"}, {"hira": "ちゅ", "kata": "チュ", "romaji": "chu", "ko": "추"}, {"hira": "ちょ", "kata": "チョ", "romaji": "cho", "ko": "초"}],
+        [{"hira": "にゃ", "kata": "ニャ", "romaji": "nya", "ko": "냐"}, {"hira": "にゅ", "kata": "ニュ", "romaji": "nyu", "ko": "뉴"}, {"hira": "にょ", "kata": "ニョ", "romaji": "nyo", "ko": "뇨"}],
+        [{"hira": "ひゃ", "kata": "ヒャ", "romaji": "hya", "ko": "햐"}, {"hira": "ひゅ", "kata": "ヒュ", "romaji": "hyu", "ko": "휴"}, {"hira": "ひょ", "kata": "ヒョ", "romaji": "hyo", "ko": "효"}],
+        [{"hira": "みゃ", "kata": "ミャ", "romaji": "mya", "ko": "먀"}, {"hira": "みゅ", "kata": "ミュ", "romaji": "myu", "ko": "뮤"}, {"hira": "みょ", "kata": "ミョ", "romaji": "myo", "ko": "묘"}],
+        [{"hira": "りゃ", "kata": "リャ", "romaji": "rya", "ko": "랴"}, {"hira": "りゅ", "kata": "リュ", "romaji": "ryu", "ko": "류"}, {"hira": "りょ", "kata": "リョ", "romaji": "ryo", "ko": "료"}],
+        [{"hira": "ぎゃ", "kata": "ギャ", "romaji": "gya", "ko": "갸"}, {"hira": "ぎゅ", "kata": "ギュ", "romaji": "gyu", "ko": "규"}, {"hira": "ぎょ", "kata": "ギョ", "romaji": "gyo", "ko": "교"}],
+        [{"hira": "じゃ", "kata": "ジャ", "romaji": "ja", "ko": "자"}, {"hira": "じゅ", "kata": "ジュ", "romaji": "ju", "ko": "주"}, {"hira": "じょ", "kata": "ジョ", "romaji": "jo", "ko": "조"}],
+        [{"hira": "びゃ", "kata": "ビャ", "romaji": "bya", "ko": "뱌"}, {"hira": "びゅ", "kata": "ビュ", "romaji": "byu", "ko": "뷰"}, {"hira": "びょ", "kata": "ビョ", "romaji": "byo", "ko": "뵤"}],
+        [{"hira": "ぴゃ", "kata": "ピャ", "romaji": "pya", "ko": "퍄"}, {"hira": "ぴゅ", "kata": "ピュ", "romaji": "pyu", "ko": "퓨"}, {"hira": "ぴょ", "kata": "ピョ", "romaji": "pyo", "ko": "표"}]
+      ]
+    }
+  ],
+  "confusables": [
+    {"chars": ["シ", "ツ"], "tip": "シ(shi)는 두 점이 왼쪽에 세로로 놓이고 긴 획을 아래에서 위로 올려 긋고, ツ(tsu)는 두 점이 위쪽에 가로로 놓이고 긴 획을 위에서 아래로 내려 긋는다."},
+    {"chars": ["ソ", "ン"], "tip": "ソ(so)는 점과 긴 획이 둘 다 위에서 아래로 내려오는 세로 느낌, ン(n)은 점이 왼쪽 위에 있고 긴 획을 아래에서 위로 올려 긋는 가로 느낌."},
+    {"chars": ["シ", "ン"], "tip": "シ(shi)는 점이 2개, ン(n)은 점이 1개."},
+    {"chars": ["ソ", "リ"], "tip": "ソ(so)는 왼쪽이 짧은 점, リ(ri)는 왼쪽도 세로 획이고 오른쪽 획이 길게 내려온다."},
+    {"chars": ["ノ", "メ"], "tip": "メ(me)는 ノ(no)에 짧은 획 하나가 X자로 교차한다."},
+    {"chars": ["ウ", "ワ", "フ"], "tip": "ウ(u)는 위에 점이 있고, ワ(wa)는 왼쪽에 짧은 세로획이 있고, フ(fu)는 꺾인 획 하나뿐."},
+    {"chars": ["ク", "ケ", "タ"], "tip": "タ(ta)는 ク(ku) 안에 짧은 획이 하나 더 있고, ケ(ke)는 오른쪽 획이 가로로 뻗은 뒤 아래로 길게 내려온다."},
+    {"chars": ["チ", "テ"], "tip": "チ(chi)는 맨 위가 비스듬한 삐침, テ(te)는 맨 위가 평평한 가로획."},
+    {"chars": ["コ", "ユ", "ロ"], "tip": "コ(ko)는 왼쪽이 열려 있고, ユ(yu)는 아래 가로획이 길게 나가고, ロ(ro)는 사각형으로 닫혀 있다."},
+    {"chars": ["ア", "マ"], "tip": "ア(a)는 왼쪽 아래로 긴 삐침이 내려오고, マ(ma)는 가운데 아래에 짧은 점이 있다."},
+    {"chars": ["ス", "ヌ"], "tip": "ヌ(nu)는 ス(su)에 짧은 획이 하나 더 교차한다."},
+    {"chars": ["ナ", "メ"], "tip": "ナ(na)는 가로획 + 비스듬한 세로획(十과 비슷), メ(me)는 X자 모양."},
+    {"chars": ["セ", "サ"], "tip": "サ(sa)는 세로획이 2개, セ(se)는 세로획이 1개이고 끝이 오른쪽으로 꺾인다."},
+    {"chars": ["ヲ", "ヨ"], "tip": "ヨ(yo)는 가로획 3개가 오른쪽 세로획에 붙어 있고, ヲ(wo)는 아래가 왼쪽으로 삐침이 빠진다."},
+    {"chars": ["ラ", "ヲ"], "tip": "ラ(ra)는 위 가로획 1개 + フ 모양, ヲ(wo)는 가로획 2개 + 삐침."},
+    {"chars": ["ハ", "ル"], "tip": "ハ(ha)는 두 획이 떨어져 있고, ル(ru)는 오른쪽 획 끝이 위로 꺾여 올라간다."},
+    {"chars": ["エ", "ニ"], "tip": "エ(e)는 가운데 세로획이 있고, ニ(ni)는 가로획 2개뿐."},
+    {"chars": ["ぬ", "め"], "tip": "ぬ(nu)는 끝에 작은 고리가 있고, め(me)는 고리 없이 끝난다."},
+    {"chars": ["ね", "れ", "わ"], "tip": "끝 모양으로 구분: ね(ne)는 작은 고리, れ(re)는 바깥으로 꺾여 나가고, わ(wa)는 둥글게 안으로 말린다."},
+    {"chars": ["る", "ろ"], "tip": "る(ru)는 끝에 고리가 있고, ろ(ro)는 고리가 없다."},
+    {"chars": ["は", "ほ", "け"], "tip": "ほ(ho)는 오른쪽 위에 가로획이 하나 더 있고, け(ke)는 고리 없이 세로획으로 끝난다."},
+    {"chars": ["さ", "ち"], "tip": "さ(sa)는 아래가 c처럼 오른쪽으로 열리고, ち(chi)는 숫자 5의 아랫부분처럼 왼쪽으로 열린다."},
+    {"chars": ["き", "さ"], "tip": "き(ki)는 가로획이 2개, さ(sa)는 1개."},
+    {"chars": ["あ", "お", "め"], "tip": "あ(a)는 세로 획이 비스듬히 관통하고, お(o)는 오른쪽 위에 점이 있고, め(me)는 가로획이 없다."},
+    {"chars": ["い", "り"], "tip": "い(i)는 두 획 길이가 비슷하고, り(ri)는 오른쪽 획이 길게 내려온다."},
+    {"chars": ["こ", "に", "た"], "tip": "こ(ko)는 가로획 2개뿐, に(ni)는 왼쪽에 세로획이, た(ta)는 왼쪽에 十 모양이 붙는다."},
+    {"chars": ["う", "ら", "つ"], "tip": "う(u)는 위에 짧은 가로점, ら(ra)는 위에 비스듬한 점과 왼쪽 세로선, つ(tsu)는 점 없는 한 획."},
+    {"chars": ["ま", "よ", "ほ"], "tip": "ま(ma)는 가로획 2개, よ(yo)는 오른쪽에 짧은 가로획 1개, ほ(ho)는 왼쪽에 세로획이 따로 있다."},
+    {"chars": ["し", "つ"], "tip": "し(shi)는 세로로 내려와서 오른쪽으로 휘고, つ(tsu)는 가로로 가다가 아래로 휜다."},
+    {"chars": ["く", "へ"], "tip": "く(ku)는 왼쪽을 가리키는 < 모양, へ(he)는 위를 가리키는 ^ 모양."},
+    {"chars": ["そ", "ろ"], "tip": "そ(so)는 위가 지그재그, ろ(ro)는 숫자 3처럼 둥글다."},
+    {"chars": ["み", "よ"], "tip": "み(mi)는 아래에 고리와 오른쪽 짧은 획, よ(yo)는 세로획 끝에 고리."},
+    {"chars": ["シャ", "シュ", "ショ"], "tip": "작은 글자 모양으로 구분: ャ는 ヤ(ya), ュ는 ユ(yu), ョ는 ヨ(yo)."},
+    {"chars": ["しゃ", "しゅ", "しょ"], "tip": "작은 글자 모양으로 구분: ゃ는 や(ya), ゅ는 ゆ(yu), ょ는 よ(yo)."}
+  ]
+}
