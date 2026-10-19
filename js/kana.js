@@ -91,17 +91,28 @@ function record(char, correct) {
   save(STATS_KEY, stats);
 }
 
-function isWeak(s) {
-  return !!s && s.w > 0 && (s.last === 0 || s.w * 2 >= s.c);
+// 틀린 횟수 1번은 맞힌 횟수 2번으로 상쇄된다. 0보다 크면 아직 헷갈리는 글자.
+function confusion(s) {
+  return s ? s.w * 2 - s.c : 0;
 }
 
-// 출제 가중치: 많이 틀린 글자일수록, 최근에 틀린 글자일수록 자주 나온다.
+function isWeak(s) {
+  return !!s && (s.last === 0 || confusion(s) > 0);
+}
+
+// 익힌 글자: 2번 이상 맞혔고, 마지막에도 맞혔고, 헷갈리는 상태가 아님
+function isMastered(s) {
+  return !!s && s.c >= 2 && s.last === 1 && !isWeak(s);
+}
+
+// 출제 가중치: 헷갈리는 글자일수록, 방금 틀린 글자일수록 자주 나오고, 익힌 글자는 가끔만 나온다.
 function weightOf(stats, char) {
   const s = stats[char];
   if (!s) return 1.5; // 아직 안 풀어 본 글자
-  let w = (1 + 2.5 * s.w) / (1 + 0.4 * s.c);
+  if (isMastered(s)) return 0.3;
+  let w = 1 + 1.5 * Math.max(0, confusion(s));
   if (s.last === 0) w *= 2;
-  return Math.min(10, Math.max(0.25, w));
+  return Math.min(10, w);
 }
 
 function weightedPick(list, weight) {
@@ -114,23 +125,40 @@ function weightedPick(list, weight) {
   return list[list.length - 1];
 }
 
+function getSettings() {
+  return { ...DEFAULT_SETTINGS, ...load(SETTINGS_KEY, {}) };
+}
+
+function buildPool(data, settings) {
+  return data.all.filter(
+    (it) => settings.sections.includes(it.section) && (settings.script === 'both' || it.script === settings.script),
+  );
+}
+
+function progressOf(items, stats) {
+  return {
+    total: items.length,
+    mastered: items.filter((it) => isMastered(stats[it.char])).length,
+    weak: items.filter((it) => isWeak(stats[it.char])).length,
+  };
+}
+
+// 홈 화면용: 기본 글자 기준 히라가나·가타카나 진도
 export async function kanaSummary() {
   let data;
   try {
     data = await loadKana();
   } catch {
-    return { seen: 0, total: 0, accuracy: 0, weak: 0 };
+    return null;
   }
   const stats = getStats();
-  let c = 0, w = 0, seen = 0, weak = 0;
-  for (const [char, s] of Object.entries(stats)) {
-    if (!data.items.has(char)) continue;
-    seen++;
-    c += s.c;
-    w += s.w;
-    if (isWeak(s)) weak++;
-  }
-  return { seen, total: data.items.size, accuracy: c + w ? Math.round((c / (c + w)) * 100) : 0, weak };
+  const basic = (script) => data.all.filter((it) => it.section === 'basic' && it.script === script);
+  return {
+    started: data.all.some((it) => stats[it.char]),
+    hira: progressOf(basic('hira'), stats),
+    kata: progressOf(basic('kata'), stats),
+    weak: data.all.filter((it) => isWeak(stats[it.char])).length,
+  };
 }
 
 function weakItems(data) {
@@ -140,56 +168,68 @@ function weakItems(data) {
     .sort((a, b) => weightOf(stats, b.char) - weightOf(stats, a.char));
 }
 
-// 약한 글자 집중 / 틀린 글자 다시 풀기를 위한 출제 풀 (퀴즈 화면으로 넘겨 줌)
-let pendingPool = null;
+// 가나 홈에서 바로 시작할 때 퀴즈 화면으로 넘겨 주는 값
+// { script } → 저장된 설정에서 문자만 바꿔 시작, { chars } → 그 글자들만 출제
+let pendingStart = null;
+
+function startFromHome(start) {
+  pendingStart = start;
+  location.hash = '#/kana/quiz';
+}
+
+function progressBar(p) {
+  const pct = p.total ? (p.mastered / p.total) * 100 : 0;
+  return h('div', { class: 'progress', title: `익힌 글자 ${p.mastered} / ${p.total}` }, h('div', { style: `width:${pct}%` }));
+}
 
 // ---------- 가나 홈 ----------
 
 export async function kanaHome(root) {
   const data = await loadKana();
   const stats = getStats();
+  const settings = getSettings();
   const weak = weakItems(data);
+  const rangeName = data.sections.filter((s) => settings.sections.includes(s.id)).map((s) => s.name.split(' ')[0]).join('·');
 
-  const weakSection = weak.length
-    ? h('section', { class: 'card stack' },
-        h('div', { class: 'row' },
-          h('h2', { style: 'margin:0' }, '헷갈리는 글자'),
-          h('div', { class: 'spacer' }),
-          h('button', {
-            class: 'btn small primary',
-            onClick: () => {
-              pendingPool = weak.map((it) => it.char);
-              location.hash = '#/kana/quiz';
-            },
-          }, '집중 연습'),
+  const scriptCard = (script, title, sample) => {
+    const p = progressOf(buildPool(data, { ...settings, script }), stats);
+    return h('section', { class: 'card stack' },
+      h('div', { class: 'row' },
+        h('div', { class: 'big-glyph' }, jp(sample)),
+        h('div', { style: 'flex:1;min-width:0' },
+          h('h2', { style: 'margin:0' }, jp(title)),
+          h('div', { class: 'small muted' }, `익힌 글자 `, h('b', null, `${p.mastered}`), ` / ${p.total}`, p.weak ? ` · 헷갈림 ${p.weak}` : ''),
         ),
-        h('ul', { class: 'weak-list' },
-          weak.slice(0, 24).map((it) =>
-            h('li', null,
-              jp(it.char),
-              h('div', { class: 'small' }, it.romaji),
-              h('div', { class: 'small muted' }, `틀림 ${stats[it.char].w} · 맞음 ${stats[it.char].c}`),
-            ),
-          ),
-        ),
-      )
-    : h('section', { class: 'card' },
-        h('h2', null, '헷갈리는 글자'),
-        h('p', { class: 'muted small', style: 'margin:0' }, '퀴즈에서 틀린 글자가 여기에 모여요. 틀린 글자는 다음 퀴즈에 더 자주 나와요.'),
-      );
+      ),
+      progressBar(p),
+      h('button', { class: 'btn primary block', onClick: () => startFromHome({ script }) }, '퀴즈 시작'),
+    );
+  };
 
   root.append(
     h('section', { class: 'stack' },
-      h('h1', null, '히라가나·가타카나 복습'),
+      h('h1', null, '히라가나·가타카나'),
+      h('p', { class: 'muted small', style: 'margin-top:-6px' },
+        `범위: ${rangeName} · `, h('a', { href: '#/kana/quiz' }, '설정 바꾸기')),
+      scriptCard('hira', 'ひらがな', 'あ'),
+      scriptCard('kata', 'カタカナ', 'ア'),
+      weak.length
+        ? h('section', { class: 'card stack' },
+            h('div', { class: 'row' },
+              h('h2', { style: 'margin:0' }, `헷갈리는 글자 ${weak.length}개`),
+            ),
+            h('div', { class: 'chips' },
+              weak.slice(0, 30).map((it) =>
+                h('button', { class: 'chip bad', onClick: () => speak(it.char) }, jp(it.char), it.romaji),
+              ),
+            ),
+            h('button', { class: 'btn block', onClick: () => startFromHome({ chars: weak.map((it) => it.char) }) }, '헷갈리는 글자만 연습'),
+          )
+        : null,
       h('a', { class: 'card menu-card', href: '#/kana/chart' },
         h('div', { class: 'big-glyph' }, jp('表')),
-        h('div', null, h('h2', null, '오십음도 보기'), h('p', { class: 'muted small' }, '글자를 누르면 발음을 들을 수 있어요')),
+        h('div', null, h('h2', null, '오십음도 보기'), h('p', { class: 'muted small' }, '글자를 누르면 발음이 나와요 · 익힌 글자는 초록색')),
       ),
-      h('a', { class: 'card menu-card', href: '#/kana/quiz' },
-        h('div', { class: 'big-glyph' }, jp('問')),
-        h('div', null, h('h2', null, '퀴즈 풀기'), h('p', { class: 'muted small' }, '문자 → 발음 / 발음 → 문자 고르기')),
-      ),
-      weakSection,
       Object.keys(stats).length
         ? h('button', {
             class: 'btn ghost block small',
@@ -221,7 +261,7 @@ export async function kanaChart(root) {
   function renderDetail() {
     if (!selected) {
       detail.replaceChildren(
-        h('div', { class: 'info muted small' }, '글자를 누르면 발음이 나와요. 빨간 점은 퀴즈에서 자주 틀린 글자예요.'),
+        h('div', { class: 'info muted small' }, '글자를 누르면 발음이 나와요. 초록 칸은 익힌 글자, 빨간 점은 헷갈리는 글자예요.'),
       );
       return;
     }
@@ -258,6 +298,7 @@ export async function kanaChart(root) {
                 const char = cell[prefs.script];
                 const cls = ['kana-cell'];
                 if (isWeak(stats[char])) cls.push('weak');
+                else if (isMastered(stats[char])) cls.push('mastered');
                 if (selected === char) cls.push('selected');
                 return h('button', {
                   class: cls.join(' '),
@@ -344,22 +385,34 @@ export async function kanaQuiz(root) {
   };
   document.addEventListener('keydown', onKey);
 
-  const ctx = { data, root, setKeys };
-  if (pendingPool) {
-    const pool = pendingPool.map((c) => data.items.get(c)).filter(Boolean);
-    pendingPool = null;
-    const settings = { ...DEFAULT_SETTINGS, ...load(SETTINGS_KEY, {}) };
-    startQuiz(ctx, pool, { ...settings, count: Math.max(5, Math.min(15, pool.length * 2)) });
+  const ctx = { data, root, setKeys, alive: true, timer: null };
+  const start = pendingStart;
+  pendingStart = null;
+  if (start?.chars) {
+    const pool = start.chars.map((c) => data.items.get(c)).filter(Boolean);
+    startQuiz(ctx, pool, { ...getSettings(), count: reviewCount(pool) });
+  } else if (start?.script) {
+    const settings = { ...getSettings(), script: start.script };
+    startQuiz(ctx, buildPool(data, settings), settings);
   } else {
     renderSettings(ctx);
   }
 
-  return () => document.removeEventListener('keydown', onKey);
+  return () => {
+    ctx.alive = false;
+    clearTimeout(ctx.timer);
+    document.removeEventListener('keydown', onKey);
+  };
+}
+
+function reviewCount(pool) {
+  return Math.max(5, Math.min(15, pool.length * 2));
 }
 
 function renderSettings(ctx) {
   const { data, root, setKeys } = ctx;
-  const settings = { ...DEFAULT_SETTINGS, ...load(SETTINGS_KEY, {}) };
+  const settings = getSettings();
+  clearTimeout(ctx.timer);
   setKeys(null);
 
   const radioSeg = (name, options) =>
@@ -392,7 +445,7 @@ function renderSettings(ctx) {
       h('input', { type: 'checkbox', name: 'autoSpeak', checked: settings.autoSpeak }),
       '정답 확인 후 발음 자동 재생',
     ),
-    h('p', { class: 'small muted', style: 'margin:0' }, '틀린 글자, 최근에 틀린 글자일수록 더 자주 나와요.'),
+    h('p', { class: 'small muted', style: 'margin:0' }, '헷갈리는 글자는 더 자주, 익힌 글자는 가끔 나와요. 맞히면 자동으로 다음 문제로 넘어가요.'),
     h('button', { class: 'btn primary block', type: 'submit' }, '시작하기'),
   );
 
@@ -411,16 +464,13 @@ function renderSettings(ctx) {
       return;
     }
     save(SETTINGS_KEY, next);
-    const pool = data.all.filter(
-      (it) => next.sections.includes(it.section) && (next.script === 'both' || it.script === next.script),
-    );
-    startQuiz(ctx, pool, next);
+    startQuiz(ctx, buildPool(data, next), next);
   });
 
   root.replaceChildren(
     h('div', { class: 'stack' },
       h('a', { href: '#/kana', class: 'muted small' }, '← 가나 복습'),
-      h('h1', null, '가나 퀴즈'),
+      h('h1', null, '퀴즈 설정'),
       form,
     ),
   );
@@ -547,12 +597,16 @@ function renderQuestion(ctx, session) {
     }
     if (mode === 'k2r' && !prompt.contains(speakBtn)) prompt.append(h('div', { style: 'margin-top:10px' }, speakBtn));
     if (session.settings.autoSpeak) speak(item.char);
+    // 맞히면 잠깐 보여 주고 자동으로 넘어가고, 틀리면 비교해 볼 수 있게 기다린다
+    if (correct) ctx.timer = setTimeout(next, 1100);
     nextBtn.hidden = false;
     nextBtn.focus({ preventScroll: true });
     nextBtn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
   function next() {
+    clearTimeout(ctx.timer);
+    if (!ctx.alive || session.questions[session.index] !== q) return;
     session.index++;
     if (session.index < total) renderQuestion(ctx, session);
     else renderResult(ctx, session);
@@ -576,7 +630,8 @@ function renderQuestion(ctx, session) {
         h('button', {
           class: 'btn ghost small',
           onClick: () => {
-            if (session.results.length === 0 || confirm('퀴즈를 그만할까요? 지금까지 푼 기록은 저장돼요.')) renderSettings(ctx);
+            clearTimeout(ctx.timer);
+            if (session.results.length === 0 || confirm('퀴즈를 그만할까요? 지금까지 푼 기록은 저장돼요.')) location.hash = '#/kana';
           },
         }, '그만하기'),
       ),
@@ -595,6 +650,7 @@ function renderResult(ctx, session) {
   const total = session.results.length;
   const wrongItems = [...new Map(session.results.filter((r) => !r.correct).map((r) => [r.item.char, r.item])).values()];
   const pct = Math.round((correct / total) * 100);
+  const mastery = progressOf(session.pool, getStats());
   const message = pct === 100 ? '완벽해요! 🎉' : pct >= 80 ? '잘했어요!' : pct >= 50 ? '조금만 더!' : '천천히 다시 해 봐요.';
 
   setKeys((e) => {
@@ -610,6 +666,8 @@ function renderResult(ctx, session) {
         h('div', { class: 'muted' }, '결과'),
         h('div', { class: 'result-score' }, `${correct} / ${total}`),
         h('div', null, message),
+        progressBar(mastery),
+        h('div', { class: 'small muted' }, `이 범위에서 익힌 글자 ${mastery.mastered} / ${mastery.total}`),
       ),
       wrongItems.length
         ? h('div', { class: 'card stack' },
@@ -621,7 +679,7 @@ function renderResult(ctx, session) {
             ),
             h('button', {
               class: 'btn primary block',
-              onClick: () => startQuiz(ctx, wrongItems, { ...session.settings, count: Math.max(5, Math.min(15, wrongItems.length * 2)) }),
+              onClick: () => startQuiz(ctx, wrongItems, { ...session.settings, count: reviewCount(wrongItems) }),
             }, '틀린 글자만 다시 풀기'),
           )
         : null,

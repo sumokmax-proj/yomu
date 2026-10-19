@@ -59,14 +59,16 @@ async function home(root) {
         h('h1', null, '오늘도 한 글자씩 ', jp('よもう!')),
         h('p', { class: 'muted' }, '게임이나 틱톡 댓글 속 일본어를 읽을 수 있을 때까지.'),
       ),
-      summary.seen > 0
-        ? h('div', { class: 'card row' },
-            h('div', null,
-              h('div', { class: 'small muted' }, '가나 연습 기록'),
-              h('div', null, h('b', null, `${summary.seen}`), ` / ${summary.total}자 풀어 봄 · 정답률 `, h('b', null, `${summary.accuracy}%`)),
+      summary?.started
+        ? h('a', { class: 'card stack', href: '#/kana', style: 'text-decoration:none' },
+            h('div', { class: 'small muted' }, '익힌 글자 (기본 46자 기준)'),
+            ...[['ひらがな', summary.hira], ['カタカナ', summary.kata]].map(([label, p]) =>
+              h('div', null,
+                h('div', { class: 'row small' }, jp(label), h('div', { class: 'spacer' }), `${p.mastered} / ${p.total}`),
+                h('div', { class: 'progress' }, h('div', { style: `width:${(p.mastered / p.total) * 100}%` })),
+              ),
             ),
-            h('div', { class: 'spacer' }),
-            summary.weak > 0 ? h('span', { class: 'badge' }, `약한 글자 ${summary.weak}개`) : null,
+            summary.weak ? h('div', { class: 'small muted' }, `헷갈리는 글자 ${summary.weak}개 → 가나 탭에서 연습`) : null,
           )
         : null,
       menuCard({ href: '#/kana', glyph: 'あ', title: '히라가나·가타카나 복습', desc: '오십음도 보기 · 퀴즈 · 헷갈리는 글자 집중 연습' }),
