@@ -385,7 +385,7 @@ export async function kanaQuiz(root) {
   };
   document.addEventListener('keydown', onKey);
 
-  const ctx = { data, root, setKeys, alive: true, timer: null };
+  const ctx = { data, root, setKeys };
   const start = pendingStart;
   pendingStart = null;
   if (start?.chars) {
@@ -398,11 +398,7 @@ export async function kanaQuiz(root) {
     renderSettings(ctx);
   }
 
-  return () => {
-    ctx.alive = false;
-    clearTimeout(ctx.timer);
-    document.removeEventListener('keydown', onKey);
-  };
+  return () => document.removeEventListener('keydown', onKey);
 }
 
 function reviewCount(pool) {
@@ -412,7 +408,6 @@ function reviewCount(pool) {
 function renderSettings(ctx) {
   const { data, root, setKeys } = ctx;
   const settings = getSettings();
-  clearTimeout(ctx.timer);
   setKeys(null);
 
   const radioSeg = (name, options) =>
@@ -445,7 +440,7 @@ function renderSettings(ctx) {
       h('input', { type: 'checkbox', name: 'autoSpeak', checked: settings.autoSpeak }),
       '정답 확인 후 발음 자동 재생',
     ),
-    h('p', { class: 'small muted', style: 'margin:0' }, '헷갈리는 글자는 더 자주, 익힌 글자는 가끔 나와요. 맞히면 자동으로 다음 문제로 넘어가요.'),
+    h('p', { class: 'small muted', style: 'margin:0' }, '헷갈리는 글자는 더 자주, 익힌 글자는 가끔 나와요.'),
     h('button', { class: 'btn primary block', type: 'submit' }, '시작하기'),
   );
 
@@ -597,16 +592,14 @@ function renderQuestion(ctx, session) {
     }
     if (mode === 'k2r' && !prompt.contains(speakBtn)) prompt.append(h('div', { style: 'margin-top:10px' }, speakBtn));
     if (session.settings.autoSpeak) speak(item.char);
-    // 맞히면 잠깐 보여 주고 자동으로 넘어가고, 틀리면 비교해 볼 수 있게 기다린다
-    if (correct) ctx.timer = setTimeout(next, 1100);
     nextBtn.hidden = false;
     nextBtn.focus({ preventScroll: true });
     nextBtn.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
   function next() {
-    clearTimeout(ctx.timer);
-    if (!ctx.alive || session.questions[session.index] !== q) return;
+    // 연타로 두 번 넘어가지 않게 지금 화면의 문제일 때만 넘긴다
+    if (session.questions[session.index] !== q) return;
     session.index++;
     if (session.index < total) renderQuestion(ctx, session);
     else renderResult(ctx, session);
@@ -630,7 +623,6 @@ function renderQuestion(ctx, session) {
         h('button', {
           class: 'btn ghost small',
           onClick: () => {
-            clearTimeout(ctx.timer);
             if (session.results.length === 0 || confirm('퀴즈를 그만할까요? 지금까지 푼 기록은 저장돼요.')) location.hash = '#/kana';
           },
         }, '그만하기'),
