@@ -63,6 +63,36 @@ function prepare(raw) {
   return { sections: raw.sections, items, all: [...items.values()], confusable };
 }
 
+// 가나 → 로마자 (예: ありがとう → arigatō, ゲーム → gēmu, ちょっと → chotto)
+export async function romajiConverter() {
+  const data = await loadKana();
+  const small = { ぁ: 'a', ぃ: 'i', ぅ: 'u', ぇ: 'e', ぉ: 'o', ァ: 'a', ィ: 'i', ゥ: 'u', ェ: 'e', ォ: 'o' };
+  const macron = { a: 'ā', i: 'ī', u: 'ū', e: 'ē', o: 'ō' };
+  const rm = (char) => data.items.get(char)?.romaji.replace(/\(.*\)/, '');
+  return (text) => {
+    let out = '';
+    let geminate = false;
+    for (let i = 0; i < text.length; i++) {
+      const two = rm(text.slice(i, i + 2));
+      let syl = two || rm(text[i]);
+      if (two) i++;
+      const ch = text[i];
+      if (!syl) {
+        if (ch === 'っ' || ch === 'ッ') { geminate = true; continue; }
+        if (ch === 'ー' && /[aiueo]$/.test(out)) { out = out.slice(0, -1) + macron[out.slice(-1)]; continue; }
+        if (small[ch] && /[aiueo]$/.test(out)) { out = out.slice(0, -1) + small[ch]; continue; }
+        syl = ch === 'ヴ' ? 'vu' : ch;
+      }
+      if (geminate) {
+        syl = (syl.startsWith('ch') ? 't' : syl[0]) + syl;
+        geminate = false;
+      }
+      out += syl;
+    }
+    return out;
+  };
+}
+
 function confusablesOf(data, char) {
   const out = new Set();
   for (const g of data.confusable.get(char) || []) for (const c of g.chars) if (c !== char) out.add(c);
