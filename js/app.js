@@ -1,13 +1,15 @@
 // 앱 진입점: 해시 기반 라우터 + 홈 화면
 import { h, jp } from './ui.js';
 import { kanaHome, kanaChart, kanaQuiz, kanaSummary } from './kana.js';
+import { vocabHome, vocabStudy, vocabSummary } from './vocab.js';
 
 const routes = {
   '': { tab: 'home', view: home },
   kana: { tab: 'kana', view: kanaHome },
   'kana/chart': { tab: 'kana', view: kanaChart },
   'kana/quiz': { tab: 'kana', view: kanaQuiz },
-  vocab: { tab: 'vocab', view: (root) => comingSoon(root, '기초 어휘 플래시카드', '語') },
+  vocab: { tab: 'vocab', view: vocabHome },
+  'vocab/study': { tab: 'vocab', view: vocabStudy },
   sentences: { tab: 'sentences', view: (root) => comingSoon(root, '문장 독해 연습', '文') },
 };
 
@@ -52,7 +54,7 @@ function menuCard({ href, glyph, title, desc, disabled }) {
 }
 
 async function home(root) {
-  const summary = await kanaSummary();
+  const [summary, vocab] = await Promise.all([kanaSummary(), vocabSummary()]);
   root.append(
     h('section', { class: 'stack' },
       h('div', null,
@@ -71,8 +73,14 @@ async function home(root) {
             summary.weak ? h('div', { class: 'small muted' }, `헷갈리는 글자 ${summary.weak}개 → 가나 탭에서 연습`) : null,
           )
         : null,
+      vocab?.started
+        ? h('a', { class: 'card stack', href: '#/vocab', style: 'text-decoration:none' },
+            h('div', { class: 'row small' }, h('span', { class: 'muted' }, '외운 단어'), h('div', { class: 'spacer' }), `${vocab.learned} / ${vocab.total}`),
+            h('div', { class: 'progress' }, h('div', { style: `width:${(vocab.learned / vocab.total) * 100}%` })),
+          )
+        : null,
       menuCard({ href: '#/kana', glyph: 'あ', title: '히라가나·가타카나 복습', desc: '오십음도 보기 · 퀴즈 · 헷갈리는 글자 집중 연습' }),
-      menuCard({ href: '#/vocab', glyph: '語', title: '기초 어휘 플래시카드', desc: '인사·일상·게임/SNS 단어를 후리가나와 함께', disabled: true }),
+      menuCard({ href: '#/vocab', glyph: '語', title: '기초 어휘 플래시카드', desc: '인사·일상·게임/SNS 단어를 알아요/모르겠어요로 복습' }),
       menuCard({ href: '#/sentences', glyph: '文', title: '문장 독해 연습', desc: '짧은 일본어 문장을 읽고 뜻 고르기', disabled: true }),
     ),
   );

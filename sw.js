@@ -1,6 +1,6 @@
 // 오프라인 지원용 서비스 워커.
 // 네트워크 우선: 온라인이면 항상 최신 파일을 받고, 오프라인일 때만 캐시를 쓴다.
-const CACHE = 'yomu-v3';
+const CACHE = 'yomu-v4';
 const CORE = [
   './',
   'index.html',
@@ -10,7 +10,9 @@ const CORE = [
   'js/storage.js',
   'js/speech.js',
   'js/kana.js',
+  'js/vocab.js',
   'data/kana.json',
+  'data/vocab.json',
   'manifest.webmanifest',
   'icons/icon-192.png',
 ];
