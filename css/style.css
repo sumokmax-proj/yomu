@@ -261,6 +261,40 @@ p { margin: 0 0 .75em; }
 .weak-list li { background: var(--surface-2); border-radius: 12px; padding: 8px; text-align: center; }
 .weak-list .jp { font-size: 1.8rem; font-weight: 700; display: block; line-height: 1.2; }
 
+/* ===== 후리가나 ===== */
+ruby { ruby-position: over; }
+rt { font-size: .5em; color: var(--muted); font-weight: 400; }
+
+/* ===== 어휘 ===== */
+.chip.filter { border: 1px solid var(--line); background: var(--surface); cursor: pointer; padding: 6px 12px; }
+.chip.filter.on { border-color: var(--accent); background: var(--accent-soft); color: var(--text); font-weight: 700; }
+
+.word-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.word-details summary { cursor: pointer; padding: 4px 0; }
+.word-details[open] summary { margin-bottom: 10px; }
+.word-row {
+  width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); cursor: pointer;
+}
+.word-row .w-jp { font-size: 1.15rem; font-weight: 700; flex: none; min-width: 5.5em; }
+.word-row .w-ko { flex: 1; min-width: 0; font-size: .9rem; color: var(--muted); }
+.status { flex: none; font-size: .7rem; padding: 2px 8px; border-radius: 99px; background: var(--surface-2); color: var(--muted); }
+.status.learning { background: var(--accent-soft); color: var(--accent); }
+.status.learned { background: var(--ok-soft); color: var(--ok); }
+
+.flashcard { min-height: 280px; display: flex; flex-direction: column; cursor: pointer; }
+.flashcard.flipped { cursor: default; }
+.fc-front { flex: 1; display: grid; place-items: center; padding: 24px 0 8px; text-align: center; }
+.fc-jp { font-size: clamp(2.2rem, 11vw, 3.2rem); font-weight: 700; line-height: 1.6; }
+.fc-back { border-top: 1px dashed var(--line); padding-top: 14px; text-align: center; }
+.fc-reading { color: var(--muted); font-size: 1.05rem; }
+.fc-ko { font-size: 1.4rem; font-weight: 700; margin: 6px 0; }
+.fc-note { text-align: left; background: var(--surface-2); border-radius: 10px; padding: 10px 12px; margin: 10px 0 0; }
+.answer-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.answer-btns .btn { min-height: 56px; font-size: 1.05rem; }
+.btn.unknown { border-color: var(--bad); color: var(--bad); background: var(--bad-soft); }
+.btn.known { border-color: var(--ok); color: #fff; background: var(--ok); }
+
 /* ===== 토스트 ===== */
 .toast {
   position: fixed; left: 50%; bottom: calc(var(--tabbar-h) + 16px + env(safe-area-inset-bottom));
